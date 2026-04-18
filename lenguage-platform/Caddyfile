@@ -1,0 +1,18 @@
+# Caddyfile - Configuración para el Reverse Proxy Caddy
+# Caddy provee TLS (HTTPS) automático mediante Let's Encrypt de forma nativa.
+
+# 1. Reemplaza midominio.com por tu dominio real
+# midominio.com {
+#     # 2. Redirige el tráfico al puerto interno donde corre Spring Boot (8080)
+#     reverse_proxy localhost:8080
+# }
+
+# O si usas Docker Compose (donde el servicio se llama "app"):
+# midominio.com {
+#     reverse_proxy app:8080
+# }
+
+# Ejemplo local para desarrollo (Caddy generará un certificado local de confianza)
+localhost {
+    reverse_proxy 127.0.0.1:8080
+}

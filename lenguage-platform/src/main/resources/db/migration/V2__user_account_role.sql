@@ -1,0 +1,2 @@
+ALTER TABLE user_account_entity
+    ADD COLUMN role VARCHAR(32) NOT NULL DEFAULT 'STUDENT';

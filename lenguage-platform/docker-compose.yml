@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    # O image: tu-usuario/lenguage-platform:latest
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      # Definir el resto de variables aquí o en un archivo .env
+      - APP_SECURITY_JWT_SECRET=${APP_SECURITY_JWT_SECRET}
+    # Solo expone el 8080 internamente en la red de docker, NO a internet
+    expose:
+      - "8080"
+
+  # Caddy actuará como tu terminación TLS (HTTPS)
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"     # Tráfico HTTP redirigido a HTTPS automáticamente
+      - "443:443"   # Tráfico HTTPS cifrado de cara a internet
+    volumes:
+      # Monta el archivo config en la imagen
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+volumes:
+  caddy_data:
+  caddy_config:

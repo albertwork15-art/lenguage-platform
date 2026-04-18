@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Heredamos el patrón de colores por defecto de Spring -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Appender Clásico (Texto humano): Solo activo para el perfil 'dev' -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>utf8</charset>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- Appender Estructurado (JSON): Solo activo para 'prod' (Producción) -->
+    <!-- Perfecto para Datadog, ELK stack (Elasticsearch, Logstash, Kibana), AWS CloudWatch -->
+    <springProfile name="prod">
+        <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <customFields>{"app":"lenguage-platform", "env":"prod"}</customFields>
+            </encoder>
+        </appender>
+        <root level="WARN">
+            <appender-ref ref="JSON_CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>
